@@ -1,7 +1,6 @@
-import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
+import { menuController } from '@ionic/core'
+import { IonApp, IonButton,  IonContent, IonHeader, IonItem, IonLabel, IonList, IonMenu, IonTitle, IonToolbar, setupIonicReact } from '@ionic/react';
+
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -21,22 +20,87 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import { useRef } from 'react';
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+const App: React.FC = () => {
+  const firstMenuRef = useRef<HTMLIonMenuElement | null>(null)
+  const secondMenuRef = useRef<HTMLIonMenuElement | null>(null)
+
+  const toggleMenu = async (menuId: string) => {
+    await menuController.enable(true, menuId)
+    await menuController.toggle(menuId)
+  }
+
+  return (
+    <IonApp>
+      <IonMenu
+        side="start"
+        menuId="first-menu"
+        contentId="main-content"
+        ref={firstMenuRef}
+      >
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>First Menu</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <IonList>
+            <IonItem>
+              <IonLabel>Inbox</IonLabel>
+            </IonItem>
+            <IonItem>
+              <IonLabel>Outbox</IonLabel>
+            </IonItem>
+          </IonList>
+        </IonContent>
+      </IonMenu>
+      <IonMenu
+        side="start"
+        menuId="second-menu"
+        contentId="main-content"
+        ref={secondMenuRef}
+      >
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Second Menu</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <IonList>
+            <IonItem>
+              <IonLabel>Inbox2</IonLabel>
+            </IonItem>
+            <IonItem>
+              <IonLabel>Outbox2</IonLabel>
+            </IonItem>
+          </IonList>
+        </IonContent>
+      </IonMenu>
+
+      <div className="ion-page" id="main-content">
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Menu Test</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent className="ion-padding">
+          <section>
+            <header>Toggle menu directly</header>
+            <IonButton onClick={() => firstMenuRef.current?.toggle()}>Toggle First Menu</IonButton>
+            <IonButton onClick={() => secondMenuRef.current?.toggle()}>Toggle Second Menu</IonButton>
+          </section>
+          <section>
+            <header>Toggle menu by MenuController</header>
+            <IonButton onClick={() => toggleMenu('first-menu')}>Toggle First Menu</IonButton>
+            <IonButton onClick={() => toggleMenu('second-menu')}>Toggle Second Menu</IonButton>
+          </section>
+        </IonContent>
+      </div>
+    </IonApp>
+  )
+}
 
 export default App;
