@@ -1,5 +1,5 @@
 import { menuController } from '@ionic/core'
-import { IonApp, IonButton,  IonContent, IonHeader, IonItem, IonLabel, IonList, IonMenu, IonTitle, IonToolbar, setupIonicReact } from '@ionic/react';
+import { IonApp, IonButton,  IonContent, IonHeader, IonItem, IonLabel, IonList, IonMenu, IonTitle, IonToolbar, setupConfig } from '@ionic/react';
 
 
 /* Core CSS required for Ionic components to work properly */
@@ -22,7 +22,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import { useRef } from 'react';
 
-setupIonicReact();
+setupConfig({});
 
 const App: React.FC = () => {
   const firstMenuRef = useRef<HTMLIonMenuElement | null>(null)
